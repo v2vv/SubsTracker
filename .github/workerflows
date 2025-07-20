@@ -1,0 +1,33 @@
+name: 部署到 Cloudflare Workers
+
+on:
+  push:
+    branches:
+      - main   # 只在推送到 main 分支时触发
+  workflow_dispatch: # 允许手动触发
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 步骤 1: 检出代码
+      - name: 检出代码仓库
+        uses: actions/checkout@v4
+
+      # 步骤 2: 安装 Node.js
+      - name: 安装 Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20' # 你可以改成适合的版本
+
+      # 步骤 3: 安装 Wrangler
+      - name: 安装 Wrangler
+        run: npm install -g wrangler
+
+      # 步骤 4: 部署到 Cloudflare Workers
+      - name: 发布 Worker
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: wrangler deploy
