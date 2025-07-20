@@ -31,7 +31,7 @@ jobs:
         run: |
           if [ -z "${{ secrets.CF_PRODUCTION_KV_ID }}" ]; then
             echo "Creating Production KV Namespace..."
-            PRODUCTION_ID=$(wrangler kv:namespace create SUBSCRIPTIONS_KV --json | jq -r '.id')
+            PRODUCTION_ID=$(wrangler kv:namespace create SUBSCRIPTIONS_KV --output json | jq -r '.id')
             echo "CF_PRODUCTION_KV_ID=$PRODUCTION_ID" >> $GITHUB_ENV
             sed -i "s|your-production-kv-namespace-id|$PRODUCTION_ID|g" wrangler.toml
           else
