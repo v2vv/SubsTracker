@@ -25,6 +25,12 @@ jobs:
       - name: 安装 Wrangler
         run: npm install -g wrangler
 
+     # Step 4: 替換 wrangler.toml 內的 KV Namespace ID
+      - name: Replace KV namespace IDs
+        run: |
+          sed -i "s|your-production-kv-namespace-id|${{ secrets.CF_PRODUCTION_KV_ID }}|g" wrangler.toml
+          # sed -i "s|your-preview-kv-namespace-id|${{ secrets.CF_PREVIEW_KV_ID }}|g" wrangler.toml
+      
       # 步骤 4: 部署到 Cloudflare Workers
       - name: 发布 Worker
         env:
